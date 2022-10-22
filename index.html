@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <title>Self Service Order</title>
+  </head>
+
+  <body>
+    <main id="app">
+      <section class="items" v-if="products">
+        <h4>{{ title }}</h4>
+        <div
+          v-for="product in products"
+          :class="product.active ? 'product selected' : 'product' "
+          @click="select(product)"
+        >
+          <div class="photo">
+            <img :src="product.photo" />
+          </div>
+
+          <div class="description">
+            <span class="name">{{ product.name }}</span>
+            <span class="price">$ {{product.price }}</span>
+            <div class="quantity-area" v-if="product.active">
+              <button
+                :disabled="product.quantity <= 1"
+                @click.stop="decrement(product)"
+              >
+                -
+              </button>
+              <span class="quantity">{{ product.quantity }}</span>
+              <button @click.stop="increment(product)">+</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="summary">
+        <strong>Resumo do pedido</strong>
+        <table>
+          <thead>
+            <tr>
+              <th>Item</th>
+              <th class="text-to-right">Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="item in cart">
+              <td>{{ item.quantity }} {{ item.name }}</td>
+              <td class="text-to-right">
+                {{ (item.price * item.quantity).toFixed(2) }}
+              </td>
+            </tr>
+
+            <tr>
+              <th>Total</th>
+              <th class="text-to-right">R$ {{ totalCart }}</th>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+    </main>
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="scripts.js"></script>
+  </body>
+</html>
